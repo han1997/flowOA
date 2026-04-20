@@ -1,0 +1,37 @@
+# IDE
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Java / Maven
+flowOA-server/target/
+*.class
+*.jar
+*.war
+*.ear
+*.log
+*.ctxt
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# Node / Vue
+flowOA-web/node_modules/
+flowOA-web/dist/
+flowOA-web/.vite/
+*.local
+
+# Env / Secrets
+.env
+.env.*
+!.env.example
+
+# Claude
+.claude/
