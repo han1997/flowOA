@@ -13,14 +13,15 @@ import com.flowoa.entity.SysUser;
 import com.flowoa.mapper.ExpenseApplyMapper;
 import com.flowoa.mapper.SysDeptMapper;
 import com.flowoa.mapper.SysUserMapper;
-import org.dromara.warm.flow.core.entity.Instance;
 import lombok.RequiredArgsConstructor;
+import org.dromara.warm.flow.core.entity.Instance;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -47,6 +48,9 @@ public class ExpenseApplyService extends ServiceImpl<ExpenseApplyMapper, Expense
         Long userId = StpUtil.getLoginIdAsLong();
         apply.setUserId(userId);
         apply.setStatus(Constants.STATUS_PENDING);
+        LocalDateTime now = LocalDateTime.now();
+        apply.setCreateTime(now);
+        apply.setUpdateTime(now);
         save(apply);
 
         Map<String, Object> variables = new HashMap<>();
@@ -63,7 +67,7 @@ public class ExpenseApplyService extends ServiceImpl<ExpenseApplyMapper, Expense
     public void approve(Long applyId, Long taskId, String comment) {
         ExpenseApply apply = getById(applyId);
         if (apply == null) {
-            throw new BusinessException("申请不存在");
+            throw new BusinessException("Apply record does not exist");
         }
         flowService.approve(taskId, comment);
 
@@ -80,7 +84,7 @@ public class ExpenseApplyService extends ServiceImpl<ExpenseApplyMapper, Expense
     public void reject(Long applyId, Long taskId, String comment) {
         ExpenseApply apply = getById(applyId);
         if (apply == null) {
-            throw new BusinessException("申请不存在");
+            throw new BusinessException("Apply record does not exist");
         }
         flowService.reject(taskId, comment);
         apply.setStatus(Constants.STATUS_REJECTED);
@@ -91,11 +95,11 @@ public class ExpenseApplyService extends ServiceImpl<ExpenseApplyMapper, Expense
     public void cancel(Long applyId) {
         ExpenseApply apply = getById(applyId);
         if (apply == null) {
-            throw new BusinessException("申请不存在");
+            throw new BusinessException("Apply record does not exist");
         }
         Long currentUserId = StpUtil.getLoginIdAsLong();
         if (!apply.getUserId().equals(currentUserId)) {
-            throw new BusinessException("只能取消自己的申请");
+            throw new BusinessException("You can only cancel your own apply record");
         }
         if (apply.getFlowInstanceId() != null) {
             flowService.terminate(apply.getFlowInstanceId());
@@ -118,11 +122,6 @@ public class ExpenseApplyService extends ServiceImpl<ExpenseApplyMapper, Expense
     }
 
     private Long getDefinitionId() {
-        var definitions = flowService.definitionList();
-        return definitions.stream()
-                .filter(d -> FLOW_CODE.equals(d.getFlowCode()))
-                .findFirst()
-                .map(d -> d.getId())
-                .orElseThrow(() -> new BusinessException("报销流程定义不存在，请先部署流程"));
+        return flowService.getPublishedDefinitionId(FLOW_CODE, "Flow definition is missing, deploy it first");
     }
 }

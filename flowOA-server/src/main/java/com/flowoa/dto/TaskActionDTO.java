@@ -4,11 +4,9 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class ApproveDTO {
-    @NotNull(message = "applyId cannot be null")
-    private Long applyId;
+public class TaskActionDTO {
 
-    @NotNull(message = "taskId cannot be null")
+    @NotNull(message = "Task ID cannot be null")
     private Long taskId;
 
     private String comment;

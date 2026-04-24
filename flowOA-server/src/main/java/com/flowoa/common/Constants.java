@@ -1,5 +1,7 @@
 package com.flowoa.common;
 
+import org.dromara.warm.flow.core.enums.FlowStatus;
+
 public class Constants {
 
     public static final String TOKEN_NAME = "Authorization";
@@ -23,7 +25,7 @@ public class Constants {
     public static final String EXPENSE_COMMUNICATION = "communication";
     public static final String EXPENSE_OTHER = "other";
 
-    public static final Integer FLOW_STATUS_FINISHED = 2;
+    public static final String FLOW_STATUS_FINISHED = FlowStatus.FINISHED.getKey();
 
     public static final String ROLE_ADMIN = "admin";
 }

@@ -14,20 +14,20 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BusinessException.class)
     public Result<?> handleBusinessException(BusinessException e) {
-        log.warn("业务异常: {}", e.getMessage());
+        log.warn("Business exception: {}", e.getMessage());
         return Result.fail(e.getCode(), e.getMessage());
     }
 
     @ExceptionHandler(NotLoginException.class)
     public Result<?> handleNotLoginException(NotLoginException e) {
-        log.warn("未登录访问: {}", e.getMessage());
-        return Result.fail(401, "未登录或登录已过期");
+        log.warn("Not logged in: {}", e.getMessage());
+        return Result.fail(401, "Not logged in or session expired");
     }
 
     @ExceptionHandler(NotRoleException.class)
     public Result<?> handleNotRoleException(NotRoleException e) {
-        log.warn("权限不足: {}", e.getMessage());
-        return Result.fail(403, "权限不足");
+        log.warn("Insufficient permission: {}", e.getMessage());
+        return Result.fail(403, "Insufficient permission");
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -35,20 +35,20 @@ public class GlobalExceptionHandler {
         String message = e.getBindingResult().getFieldErrors().stream()
                 .map(error -> error.getField() + ": " + error.getDefaultMessage())
                 .findFirst()
-                .orElse("参数校验失败");
-        log.warn("参数校验失败: {}", message);
+                .orElse("Parameter validation failed");
+        log.warn("Validation failed: {}", message);
         return Result.fail(400, message);
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
     public Result<?> handleConstraintViolationException(ConstraintViolationException e) {
-        log.warn("参数校验失败: {}", e.getMessage());
+        log.warn("Validation failed: {}", e.getMessage());
         return Result.fail(400, e.getMessage());
     }
 
     @ExceptionHandler(Exception.class)
     public Result<?> handleException(Exception e) {
-        log.error("系统异常", e);
-        return Result.fail(500, "系统内部错误");
+        log.error("System exception", e);
+        return Result.fail(500, "Internal server error");
     }
 }

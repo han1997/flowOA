@@ -29,21 +29,21 @@ public class SysRoleController {
     @SaCheckRole("admin")
     @PostMapping
     public Result<?> add(@RequestBody SysRole role) {
-        roleService.save(role);
+        roleService.createRole(role);
         return Result.ok();
     }
 
     @SaCheckRole("admin")
     @PutMapping
     public Result<?> update(@RequestBody SysRole role) {
-        roleService.updateById(role);
+        roleService.updateRole(role);
         return Result.ok();
     }
 
     @SaCheckRole("admin")
     @DeleteMapping("/{id}")
     public Result<?> delete(@PathVariable Long id) {
-        roleService.removeById(id);
+        roleService.deleteRole(id);
         return Result.ok();
     }
 }

@@ -6,10 +6,10 @@ import lombok.Data;
 
 @Data
 public class TransferDTO {
-    @NotNull(message = "任务ID不能为空")
+    @NotNull(message = "taskId cannot be null")
     private Long taskId;
 
-    @NotBlank(message = "目标用户ID不能为空")
+    @NotBlank(message = "targetUserId cannot be blank")
     private String targetUserId;
 
     private String comment;

@@ -1,10 +1,16 @@
 package com.flowoa.entity;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @TableName("sys_dept")
@@ -32,7 +38,7 @@ public class SysDept implements Serializable {
     @TableLogic
     private Integer deleted;
 
-    /** 子部门列表(非数据库字段) */
+    /** Child departments (non-persistent field). */
     @TableField(exist = false)
-    private java.util.List<SysDept> children;
+    private List<SysDept> children;
 }

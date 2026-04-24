@@ -7,7 +7,13 @@ import com.flowoa.entity.LeaveApply;
 import com.flowoa.service.LeaveApplyService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/approval/leave")
@@ -38,7 +44,7 @@ public class LeaveApplyController {
 
     @PostMapping("/approve")
     public Result<?> approve(@Valid @RequestBody ApproveDTO dto) {
-        // 从业务路径中获取applyId，这里通过taskId反查
+        // applyId is resolved from business data; taskId is used for flow operation.
         leaveApplyService.approve(dto.getApplyId(), dto.getTaskId(), dto.getComment());
         return Result.ok();
     }

@@ -1,6 +1,11 @@
 package com.flowoa.entity;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -38,15 +43,15 @@ public class SysUser implements Serializable {
     @TableLogic
     private Integer deleted;
 
-    /** 部门名称(非数据库字段) */
+    /** Department name (non-persistent field). */
     @TableField(exist = false)
     private String deptName;
 
-    /** 角色名称(非数据库字段) */
+    /** Role name (non-persistent field). */
     @TableField(exist = false)
     private String roleName;
 
-    /** 角色编码(非数据库字段) */
+    /** Role code (non-persistent field). */
     @TableField(exist = false)
     private String roleCode;
 }

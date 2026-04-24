@@ -1,12 +1,12 @@
 package com.flowoa.controller;
 
 import com.flowoa.common.Result;
-import com.flowoa.dto.ApproveDTO;
+import com.flowoa.dto.TaskActionDTO;
 import com.flowoa.dto.TransferDTO;
 import com.flowoa.service.FlowService;
-import org.dromara.warm.flow.core.entity.Instance;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.dromara.warm.flow.core.entity.Instance;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,13 +22,13 @@ public class FlowController {
     }
 
     @PostMapping("/approve")
-    public Result<?> approve(@Valid @RequestBody ApproveDTO dto) {
+    public Result<?> approve(@Valid @RequestBody TaskActionDTO dto) {
         flowService.approve(dto.getTaskId(), dto.getComment());
         return Result.ok();
     }
 
     @PostMapping("/reject")
-    public Result<?> reject(@Valid @RequestBody ApproveDTO dto) {
+    public Result<?> reject(@Valid @RequestBody TaskActionDTO dto) {
         flowService.reject(dto.getTaskId(), dto.getComment());
         return Result.ok();
     }

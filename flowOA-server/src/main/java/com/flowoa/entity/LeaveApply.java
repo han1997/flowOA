@@ -1,6 +1,10 @@
 package com.flowoa.entity;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -19,7 +23,7 @@ public class LeaveApply implements Serializable {
 
     private Long userId;
 
-    /** 请假类型: annual/sick/personal/maternity/marriage/bereavement */
+    /** annual/sick/personal/maternity/marriage/bereavement */
     private String leaveType;
 
     private LocalDate startDate;
@@ -30,7 +34,7 @@ public class LeaveApply implements Serializable {
 
     private String reason;
 
-    /** 状态: draft/pending/approved/rejected/cancelled */
+    /** draft/pending/approved/rejected/cancelled */
     private String status;
 
     private Long flowInstanceId;
@@ -41,11 +45,11 @@ public class LeaveApply implements Serializable {
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
 
-    /** 申请人姓名(非数据库字段) */
+    /** Applicant name (non-persistent field). */
     @TableField(exist = false)
     private String userName;
 
-    /** 申请人部门(非数据库字段) */
+    /** Applicant department (non-persistent field). */
     @TableField(exist = false)
     private String deptName;
 }

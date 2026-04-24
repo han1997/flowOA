@@ -11,7 +11,10 @@ import com.flowoa.service.GenericApplyService;
 import com.flowoa.service.LeaveApplyService;
 import com.flowoa.vo.MyApplyVO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -51,7 +54,7 @@ public class MyApplyController {
         vo.setId(a.getId());
         vo.setTitle(a.getTitle());
         vo.setType("leave");
-        vo.setTypeName("请假申请");
+        vo.setTypeName("Leave");
         vo.setStatus(a.getStatus());
         vo.setUserName(a.getUserName());
         vo.setCreateTime(a.getCreateTime());
@@ -63,7 +66,7 @@ public class MyApplyController {
         vo.setId(a.getId());
         vo.setTitle(a.getTitle());
         vo.setType("expense");
-        vo.setTypeName("报销申请");
+        vo.setTypeName("Expense");
         vo.setStatus(a.getStatus());
         vo.setUserName(a.getUserName());
         vo.setCreateTime(a.getCreateTime());
@@ -75,7 +78,7 @@ public class MyApplyController {
         vo.setId(a.getId());
         vo.setTitle(a.getTitle());
         vo.setType("generic");
-        vo.setTypeName("通用申请");
+        vo.setTypeName("Generic");
         vo.setStatus(a.getStatus());
         vo.setUserName(a.getUserName());
         vo.setCreateTime(a.getCreateTime());
