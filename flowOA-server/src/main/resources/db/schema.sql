@@ -12,7 +12,9 @@ CREATE TABLE sys_role (
     update_time DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     deleted     TINYINT      NOT NULL DEFAULT 0,
     PRIMARY KEY (id),
-    UNIQUE KEY uk_code (code)
+    -- Functional index: only enforce uniqueness for non-deleted records (deleted=0)
+    -- This allows multiple deleted records with the same code
+    UNIQUE KEY uk_code_active ((CASE WHEN deleted = 0 THEN code ELSE NULL END))
 ) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS sys_dept;
@@ -44,7 +46,9 @@ CREATE TABLE sys_user (
     update_time DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     deleted     TINYINT      NOT NULL DEFAULT 0,
     PRIMARY KEY (id),
-    UNIQUE KEY uk_username (username)
+    -- Functional index: only enforce uniqueness for non-deleted records (deleted=0)
+    -- This allows multiple deleted records with the same username
+    UNIQUE KEY uk_username_active ((CASE WHEN deleted = 0 THEN username ELSE NULL END))
 ) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS leave_apply;
