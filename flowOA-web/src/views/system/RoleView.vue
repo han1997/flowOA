@@ -63,7 +63,9 @@ const formRules = {
   code: [{ required: true, message: '请输入角色编码', trigger: 'blur' }]
 }
 
-onMounted(() => { loadData() })
+onMounted(() => {
+  loadData()
+})
 
 async function loadData() {
   const res = await getRoleList()
@@ -98,7 +100,7 @@ async function handleSubmit() {
 }
 
 async function handleDelete(row) {
-  await ElMessageBox.confirm(`确定删除角色 ${row.name} 吗?`, '提示', { type: 'warning' })
+  await ElMessageBox.confirm(`确定删除角色 ${row.name} 吗？`, '提示', { type: 'warning' })
   await deleteRole(row.id)
   ElMessage.success('删除成功')
   loadData()
@@ -106,5 +108,8 @@ async function handleDelete(row) {
 </script>
 
 <style scoped>
-.toolbar { margin-bottom: 16px; }
+.toolbar {
+  margin-bottom: 16px;
+}
 </style>
+

@@ -22,30 +22,30 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper, SysRole> {
     public void createRole(SysRole role) {
         validateRoleCode(role.getCode());
         if (existsActiveCode(role.getCode(), null)) {
-            throw new BusinessException("Role code already exists");
+            throw new BusinessException("角色编码已存在");
         }
         // Clear historical logically deleted rows with the same code so code can be reused.
         baseMapper.forceDeleteDeletedByCode(role.getCode());
         try {
             save(role);
         } catch (DuplicateKeyException e) {
-            throw new BusinessException("Role code already exists");
+            throw new BusinessException("角色编码已存在");
         }
     }
 
     public void updateRole(SysRole role) {
         if (role.getId() == null) {
-            throw new BusinessException("Role id cannot be null");
+            throw new BusinessException("角色ID不能为空");
         }
         validateRoleCode(role.getCode());
         if (existsActiveCode(role.getCode(), role.getId())) {
-            throw new BusinessException("Role code already exists");
+            throw new BusinessException("角色编码已存在");
         }
         baseMapper.forceDeleteDeletedByCode(role.getCode());
         try {
             updateById(role);
         } catch (DuplicateKeyException e) {
-            throw new BusinessException("Role code already exists");
+            throw new BusinessException("角色编码已存在");
         }
     }
 
@@ -62,7 +62,7 @@ public class SysRoleService extends ServiceImpl<SysRoleMapper, SysRole> {
 
     private void validateRoleCode(String code) {
         if (!StringUtils.hasText(code)) {
-            throw new BusinessException("Role code cannot be blank");
+            throw new BusinessException("角色编码不能为空");
         }
     }
 }

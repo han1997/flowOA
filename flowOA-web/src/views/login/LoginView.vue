@@ -7,16 +7,23 @@
           <el-input v-model="loginForm.username" placeholder="用户名" prefix-icon="User" size="large" />
         </el-form-item>
         <el-form-item prop="password">
-          <el-input v-model="loginForm.password" type="password" placeholder="密码" prefix-icon="Lock" size="large"
-            show-password @keyup.enter="handleLogin" />
+          <el-input
+            v-model="loginForm.password"
+            type="password"
+            placeholder="密码"
+            prefix-icon="Lock"
+            size="large"
+            show-password
+            @keyup.enter="handleLogin"
+          />
         </el-form-item>
         <el-form-item>
           <el-button type="primary" size="large" :loading="loading" @click="handleLogin" style="width: 100%">
-            登 录
+            登录
           </el-button>
         </el-form-item>
       </el-form>
-      <div class="login-tip" v-if="isDev">默认账号: admin / admin123</div>
+      <div class="login-tip" v-if="isDev">默认账号：admin / admin123</div>
     </el-card>
   </div>
 </template>
@@ -53,8 +60,8 @@ async function handleLogin() {
     await userStore.login(loginForm)
     ElMessage.success('登录成功')
     router.push('/dashboard')
-  } catch (e) {
-    // Error handled by interceptor
+  } catch {
+    // Error already displayed by Axios interceptor
   } finally {
     loading.value = false
   }
@@ -85,3 +92,4 @@ async function handleLogin() {
   margin-top: 10px;
 }
 </style>
+

@@ -30,13 +30,13 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> {
     public SysUser login(String username, String password) {
         SysUser user = lambdaQuery().eq(SysUser::getUsername, username).one();
         if (user == null) {
-            throw new BusinessException("User does not exist");
+            throw new BusinessException("用户不存在");
         }
         if (!BCrypt.checkpw(password, user.getPassword())) {
-            throw new BusinessException("Wrong password");
+            throw new BusinessException("密码错误");
         }
         if (user.getStatus() != 1) {
-            throw new BusinessException("User is disabled");
+            throw new BusinessException("用户已被禁用");
         }
         return user;
     }
@@ -69,7 +69,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> {
         validateUsername(user.getUsername());
         long count = lambdaQuery().eq(SysUser::getUsername, user.getUsername()).count();
         if (count > 0) {
-            throw new BusinessException("Username already exists");
+            throw new BusinessException("用户名已存在");
         }
         // Clear historical logically deleted rows with the same username so username can be reused.
         baseMapper.forceDeleteDeletedByUsername(user.getUsername());
@@ -80,13 +80,13 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> {
         try {
             save(user);
         } catch (DuplicateKeyException e) {
-            throw new BusinessException("Username already exists");
+            throw new BusinessException("用户名已存在");
         }
     }
 
     public void updateUser(SysUser user) {
         if (user.getId() == null) {
-            throw new BusinessException("User id cannot be null");
+            throw new BusinessException("用户ID不能为空");
         }
         if (StringUtils.hasText(user.getUsername())) {
             validateUsername(user.getUsername());
@@ -95,7 +95,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> {
                     .ne(SysUser::getId, user.getId())
                     .count();
             if (duplicateCount > 0) {
-                throw new BusinessException("Username already exists");
+                throw new BusinessException("用户名已存在");
             }
             baseMapper.forceDeleteDeletedByUsername(user.getUsername());
         }
@@ -108,7 +108,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> {
         try {
             updateById(user);
         } catch (DuplicateKeyException e) {
-            throw new BusinessException("Username already exists");
+            throw new BusinessException("用户名已存在");
         }
     }
 
@@ -142,7 +142,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> {
 
     private void validateUsername(String username) {
         if (!StringUtils.hasText(username)) {
-            throw new BusinessException("Username cannot be blank");
+            throw new BusinessException("用户名不能为空");
         }
     }
 }

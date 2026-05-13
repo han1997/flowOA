@@ -8,6 +8,10 @@ export function getExpenseById(id) {
   return request.get(`/approval/expense/${id}`)
 }
 
+export function getExpenseProgress(id) {
+  return request.get(`/approval/expense/progress/${id}`)
+}
+
 export function submitExpense(data) {
   return request.post('/approval/expense/submit', data)
 }

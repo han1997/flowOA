@@ -46,7 +46,7 @@ public class AuthController {
         Long userId = StpUtil.getLoginIdAsLong();
         SysUser user = userService.getById(userId);
         if (user == null) {
-            return Result.fail("User does not exist");
+            return Result.fail("用户不存在");
         }
         user.setPassword(null);
         userService.fillUserInfo(user);

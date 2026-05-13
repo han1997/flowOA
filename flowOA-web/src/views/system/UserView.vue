@@ -46,12 +46,18 @@
         </el-table-column>
       </el-table>
 
-      <el-pagination class="pagination" v-model:current-page="queryParams.pageNum"
-        v-model:page-size="queryParams.pageSize" :total="total" :page-sizes="[10, 20, 50]"
-        layout="total, sizes, prev, pager, next, jumper" @size-change="loadData" @current-change="loadData" />
+      <el-pagination
+        class="pagination"
+        v-model:current-page="queryParams.pageNum"
+        v-model:page-size="queryParams.pageSize"
+        :total="total"
+        :page-sizes="[10, 20, 50]"
+        layout="total, sizes, prev, pager, next, jumper"
+        @size-change="loadData"
+        @current-change="loadData"
+      />
     </el-card>
 
-    <!-- Add/Edit Dialog -->
     <el-dialog v-model="dialogVisible" :title="isEdit ? '编辑用户' : '新增用户'" width="500px">
       <el-form ref="formRef" :model="form" :rules="formRules" label-width="80px">
         <el-form-item label="用户名" prop="username">
@@ -112,7 +118,15 @@ const formRef = ref(null)
 const queryParams = reactive({ pageNum: 1, pageSize: 10, name: '', deptId: null, status: null })
 
 const form = reactive({
-  id: null, username: '', password: '', name: '', phone: '', email: '', deptId: null, roleId: null, status: 1
+  id: null,
+  username: '',
+  password: '',
+  name: '',
+  phone: '',
+  email: '',
+  deptId: null,
+  roleId: null,
+  status: 1
 })
 
 const formRules = {
@@ -169,7 +183,17 @@ function resetQuery() {
 
 function handleAdd() {
   isEdit.value = false
-  Object.assign(form, { id: null, username: '', password: '', name: '', phone: '', email: '', deptId: null, roleId: null, status: 1 })
+  Object.assign(form, {
+    id: null,
+    username: '',
+    password: '',
+    name: '',
+    phone: '',
+    email: '',
+    deptId: null,
+    roleId: null,
+    status: 1
+  })
   dialogVisible.value = true
 }
 
@@ -195,7 +219,7 @@ async function handleSubmit() {
 }
 
 async function handleDelete(row) {
-  await ElMessageBox.confirm(`确定删除用户 ${row.name} 吗?`, '提示', { type: 'warning' })
+  await ElMessageBox.confirm(`确定删除用户 ${row.name} 吗？`, '提示', { type: 'warning' })
   await deleteUser(row.id)
   ElMessage.success('删除成功')
   loadData()
@@ -216,3 +240,4 @@ async function handleDelete(row) {
   justify-content: flex-end;
 }
 </style>
+

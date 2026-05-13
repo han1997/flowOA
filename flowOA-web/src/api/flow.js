@@ -41,3 +41,14 @@ export function transferFlow(data) {
 export function terminateFlow(instanceId) {
   return request.post(`/flow/terminate/${instanceId}`)
 }
+
+export function saveFlowDesign(data) {
+  return request.post('/flow/definition/save', data)
+}
+
+export function publishFlowDefinition(id) {
+  return request.post(`/flow/definition/publish/${id}`)
+}
+
+// Re-export getUserList from user.js for convenience
+export { getUserList } from './user'

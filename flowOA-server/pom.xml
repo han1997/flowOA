@@ -75,6 +75,13 @@
             <version>${warm-flow.version}</version>
         </dependency>
 
+        <!-- Warm-Flow UI Designer (Spring Boot 3 Web) -->
+        <dependency>
+            <groupId>org.dromara.warm</groupId>
+            <artifactId>warm-flow-plugin-ui-sb-web</artifactId>
+            <version>${warm-flow.version}</version>
+        </dependency>
+
         <!-- Lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>

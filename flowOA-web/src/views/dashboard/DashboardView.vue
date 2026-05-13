@@ -51,7 +51,7 @@
       <el-col :span="16">
         <el-card>
           <template #header>
-            <span>快速入口</span>
+            <span>快捷入口</span>
           </template>
           <el-row :gutter="20">
             <el-col :span="6">
@@ -85,7 +85,7 @@
           <el-descriptions :column="1">
             <el-descriptions-item label="系统名称">FlowOA 办公审批系统</el-descriptions-item>
             <el-descriptions-item label="版本号">1.0.0</el-descriptions-item>
-            <el-descriptions-item label="工作流引擎">warm-flow</el-descriptions-item>
+            <el-descriptions-item label="工作流引擎">暖流引擎（Warm-Flow）</el-descriptions-item>
             <el-descriptions-item label="当前用户">{{ userStore.userInfo?.name || '-' }}</el-descriptions-item>
           </el-descriptions>
         </el-card>
@@ -107,7 +107,7 @@ onMounted(async () => {
     const res = await getDashboardStats()
     stats.value = res.data || {}
   } catch (e) {
-    // Stats loading failed, show defaults
+    // 加载统计信息失败时展示默认值
   }
 })
 </script>

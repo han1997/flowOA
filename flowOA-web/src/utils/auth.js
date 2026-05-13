@@ -30,3 +30,20 @@ export function clearAuth() {
   removeToken()
   removeUser()
 }
+
+// Additional functions for warm-flow-ui integration
+export function getFramework() {
+  return 'VUE3'
+}
+
+export function setTokenName(tokenName) {
+  localStorage.setItem('tokenName', tokenName)
+}
+
+export function getTokenName() {
+  return localStorage.getItem('tokenName')
+}
+
+export function setFramework(framework) {
+  localStorage.setItem('framework', framework)
+}

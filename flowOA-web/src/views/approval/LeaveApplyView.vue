@@ -38,18 +38,25 @@
         <el-table-column prop="createTime" label="申请时间" width="170" />
         <el-table-column label="操作" width="150" fixed="right">
           <template #default="{ row }">
-            <el-button size="small" type="danger" v-if="row.status === 'pending'"
-              @click="handleCancel(row)">取消</el-button>
+            <el-button size="small" type="danger" v-if="row.status === 'pending'" @click="handleCancel(row)">
+              取消
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
 
-      <el-pagination class="pagination" v-model:current-page="queryParams.pageNum"
-        v-model:page-size="queryParams.pageSize" :total="total" :page-sizes="[10, 20, 50]"
-        layout="total, sizes, prev, pager, next, jumper" @size-change="loadData" @current-change="loadData" />
+      <el-pagination
+        class="pagination"
+        v-model:current-page="queryParams.pageNum"
+        v-model:page-size="queryParams.pageSize"
+        :total="total"
+        :page-sizes="[10, 20, 50]"
+        layout="total, sizes, prev, pager, next, jumper"
+        @size-change="loadData"
+        @current-change="loadData"
+      />
     </el-card>
 
-    <!-- Apply Dialog -->
     <el-dialog v-model="dialogVisible" title="请假申请" width="550px">
       <el-form ref="formRef" :model="form" :rules="formRules" label-width="100px">
         <el-form-item label="标题" prop="title">
@@ -97,14 +104,37 @@ const dialogVisible = ref(false)
 const submitting = ref(false)
 const formRef = ref(null)
 
-const leaveTypeMap = { annual: '年假', sick: '病假', personal: '事假', maternity: '产假', marriage: '婚假', bereavement: '丧假' }
-const statusMap = { draft: '草稿', pending: '待审批', approved: '已通过', rejected: '已驳回', cancelled: '已取消' }
-const statusTypeMap = { draft: 'info', pending: 'warning', approved: 'success', rejected: 'danger', cancelled: 'info' }
+const leaveTypeMap = {
+  annual: '年假',
+  sick: '病假',
+  personal: '事假',
+  maternity: '产假',
+  marriage: '婚假',
+  bereavement: '丧假'
+}
+const statusMap = {
+  draft: '草稿',
+  pending: '待审批',
+  approved: '已通过',
+  rejected: '已驳回',
+  cancelled: '已取消'
+}
+const statusTypeMap = {
+  draft: 'info',
+  pending: 'warning',
+  approved: 'success',
+  rejected: 'danger',
+  cancelled: 'info'
+}
 
 const queryParams = reactive({ pageNum: 1, pageSize: 10, status: '' })
-
 const form = reactive({
-  title: '', leaveType: '', startDate: '', endDate: '', days: 1, reason: ''
+  title: '',
+  leaveType: '',
+  startDate: '',
+  endDate: '',
+  days: 1,
+  reason: ''
 })
 
 const formRules = {
@@ -116,7 +146,9 @@ const formRules = {
   reason: [{ required: true, message: '请输入请假原因', trigger: 'blur' }]
 }
 
-onMounted(() => { loadData() })
+onMounted(() => {
+  loadData()
+})
 
 async function loadData() {
   const res = await getLeavePage(queryParams)
@@ -156,7 +188,7 @@ async function handleSubmit() {
 }
 
 async function handleCancel(row) {
-  await ElMessageBox.confirm('确定取消该请假申请吗?', '提示', { type: 'warning' })
+  await ElMessageBox.confirm('确定取消该请假申请吗？', '提示', { type: 'warning' })
   await cancelLeave(row.id)
   ElMessage.success('已取消')
   loadData()
@@ -177,3 +209,4 @@ async function handleCancel(row) {
   justify-content: flex-end;
 }
 </style>
+

@@ -1,8 +1,16 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import ElementPlus from 'element-plus'
+import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import 'element-plus/dist/index.css'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
+// LogicFlow styles
+import '@logicflow/core/lib/style/index.css'
+import '@logicflow/extension/lib/style/index.css'
+// SVG icons
+import 'virtual:svg-icons-register'
+// Custom styles
+import './assets/styles/element-ui.scss'
 import App from './App.vue'
 import router from './router'
 
@@ -16,5 +24,5 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 
 app.use(pinia)
 app.use(router)
-app.use(ElementPlus, { locale: undefined }) // Uses default zh-CN if needed
+app.use(ElementPlus, { locale: zhCn })
 app.mount('#app')

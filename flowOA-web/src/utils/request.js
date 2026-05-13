@@ -16,9 +16,7 @@ request.interceptors.request.use(
     }
     return config
   },
-  error => {
-    return Promise.reject(error)
-  }
+  error => Promise.reject(error)
 )
 
 request.interceptors.response.use(
@@ -54,3 +52,4 @@ request.interceptors.response.use(
 )
 
 export default request
+

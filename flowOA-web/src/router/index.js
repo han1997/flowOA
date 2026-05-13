@@ -18,7 +18,6 @@ const routes = [
         component: () => import('@/views/dashboard/DashboardView.vue'),
         meta: { title: '首页' }
       },
-      // System management
       {
         path: 'system/user',
         name: 'User',
@@ -37,7 +36,6 @@ const routes = [
         component: () => import('@/views/system/RoleView.vue'),
         meta: { title: '角色管理' }
       },
-      // Flow management
       {
         path: 'flow/definition',
         name: 'FlowDefinition',
@@ -50,7 +48,6 @@ const routes = [
         component: () => import('@/views/flow/DiagramView.vue'),
         meta: { title: '流程设计' }
       },
-      // Approval
       {
         path: 'approval/leave',
         name: 'LeaveApply',
@@ -90,7 +87,6 @@ const router = createRouter({
   routes
 })
 
-// Navigation guard
 router.beforeEach((to, from, next) => {
   const token = getToken()
   if (to.path !== '/login' && !token) {
@@ -103,3 +99,4 @@ router.beforeEach((to, from, next) => {
 })
 
 export default router
+

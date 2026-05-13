@@ -65,12 +65,15 @@ const formRef = ref(null)
 const parentDept = ref(null)
 
 const form = reactive({ id: null, parentId: 0, name: '', leader: '', sort: 0, status: 1 })
+const formRules = {
+  name: [{ required: true, message: '请输入部门名称', trigger: 'blur' }]
+}
 
-const formRules = { name: [{ required: true, message: '请输入部门名称', trigger: 'blur' }] }
+const parentName = computed(() => (parentDept.value ? parentDept.value.name : '顶级部门'))
 
-const parentName = computed(() => parentDept.value ? parentDept.value.name : '顶级部门')
-
-onMounted(() => { loadData() })
+onMounted(() => {
+  loadData()
+})
 
 async function loadData() {
   const res = await getDeptTree()
@@ -122,7 +125,7 @@ async function handleDelete(row) {
     ElMessage.warning('请先删除子部门')
     return
   }
-  await ElMessageBox.confirm(`确定删除部门 ${row.name} 吗?`, '提示', { type: 'warning' })
+  await ElMessageBox.confirm(`确定删除部门 ${row.name} 吗？`, '提示', { type: 'warning' })
   await deleteDept(row.id)
   ElMessage.success('删除成功')
   loadData()
@@ -130,5 +133,8 @@ async function handleDelete(row) {
 </script>
 
 <style scoped>
-.toolbar { margin-bottom: 16px; }
+.toolbar {
+  margin-bottom: 16px;
+}
 </style>
+

@@ -47,4 +47,12 @@ public class ExpenseApply implements Serializable {
     /** Applicant department (non-persistent field). */
     @TableField(exist = false)
     private String deptName;
+
+    /** Current node name (non-persistent field). */
+    @TableField(exist = false)
+    private String currentNodeName;
+
+    /** Current approvers (non-persistent field). */
+    @TableField(exist = false)
+    private String currentApprovers;
 }

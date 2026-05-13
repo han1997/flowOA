@@ -13,6 +13,7 @@ import com.flowoa.entity.SysUser;
 import com.flowoa.mapper.ExpenseApplyMapper;
 import com.flowoa.mapper.SysDeptMapper;
 import com.flowoa.mapper.SysUserMapper;
+import com.flowoa.vo.FlowProgressVO;
 import lombok.RequiredArgsConstructor;
 import org.dromara.warm.flow.core.entity.Instance;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,12 @@ import org.springframework.util.StringUtils;
 import java.util.HashMap;
 import java.util.Map;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.LinkedHashSet;
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -39,7 +46,15 @@ public class ExpenseApplyService extends ServiceImpl<ExpenseApplyMapper, Expense
                .eq(userId != null, ExpenseApply::getUserId, userId)
                .orderByDesc(ExpenseApply::getCreateTime);
         Page<ExpenseApply> page = page(new Page<>(pageNum, pageSize), wrapper);
-        page.getRecords().forEach(this::fillApplyInfo);
+
+        List<Long> instanceIds = page.getRecords().stream()
+                .map(ExpenseApply::getFlowInstanceId)
+                .filter(Objects::nonNull)
+                .distinct()
+                .collect(Collectors.toList());
+        Map<Long, FlowProgressVO> progressMap = flowService.getProgressBatch(instanceIds);
+
+        page.getRecords().forEach(apply -> fillApplyInfo(apply, progressMap));
         return new PageResult<>(page.getRecords(), page.getTotal(), page.getCurrent(), page.getSize());
     }
 
@@ -67,7 +82,7 @@ public class ExpenseApplyService extends ServiceImpl<ExpenseApplyMapper, Expense
     public void approve(Long applyId, Long taskId, String comment) {
         ExpenseApply apply = getById(applyId);
         if (apply == null) {
-            throw new BusinessException("Apply record does not exist");
+            throw new BusinessException("申请记录不存在");
         }
         flowService.approve(taskId, comment);
 
@@ -84,7 +99,7 @@ public class ExpenseApplyService extends ServiceImpl<ExpenseApplyMapper, Expense
     public void reject(Long applyId, Long taskId, String comment) {
         ExpenseApply apply = getById(applyId);
         if (apply == null) {
-            throw new BusinessException("Apply record does not exist");
+            throw new BusinessException("申请记录不存在");
         }
         flowService.reject(taskId, comment);
         apply.setStatus(Constants.STATUS_REJECTED);
@@ -95,11 +110,11 @@ public class ExpenseApplyService extends ServiceImpl<ExpenseApplyMapper, Expense
     public void cancel(Long applyId) {
         ExpenseApply apply = getById(applyId);
         if (apply == null) {
-            throw new BusinessException("Apply record does not exist");
+            throw new BusinessException("申请记录不存在");
         }
         Long currentUserId = StpUtil.getLoginIdAsLong();
         if (!apply.getUserId().equals(currentUserId)) {
-            throw new BusinessException("You can only cancel your own apply record");
+            throw new BusinessException("只能取消自己的申请记录");
         }
         if (apply.getFlowInstanceId() != null) {
             flowService.terminate(apply.getFlowInstanceId());
@@ -108,7 +123,7 @@ public class ExpenseApplyService extends ServiceImpl<ExpenseApplyMapper, Expense
         updateById(apply);
     }
 
-    private void fillApplyInfo(ExpenseApply apply) {
+    private void fillApplyInfo(ExpenseApply apply, Map<Long, FlowProgressVO> progressMap) {
         SysUser user = userMapper.selectById(apply.getUserId());
         if (user != null) {
             apply.setUserName(user.getName());
@@ -119,9 +134,17 @@ public class ExpenseApplyService extends ServiceImpl<ExpenseApplyMapper, Expense
                 }
             }
         }
+
+        if (apply.getFlowInstanceId() != null && progressMap != null) {
+            FlowProgressVO progress = progressMap.get(apply.getFlowInstanceId());
+            if (progress != null) {
+                apply.setCurrentNodeName(FlowProgressVO.join(progress.getCurrentNodeNames()));
+                apply.setCurrentApprovers(FlowProgressVO.join(progress.getCurrentApproverNames()));
+            }
+        }
     }
 
     private Long getDefinitionId() {
-        return flowService.getPublishedDefinitionId(FLOW_CODE, "Flow definition is missing, deploy it first");
+        return flowService.getPublishedDefinitionId(FLOW_CODE, "流程定义不存在，请先部署流程");
     }
 }

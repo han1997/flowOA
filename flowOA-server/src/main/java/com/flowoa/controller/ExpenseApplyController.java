@@ -1,10 +1,15 @@
 package com.flowoa.controller;
 
+import cn.dev33.satoken.stp.StpUtil;
 import com.flowoa.common.PageResult;
 import com.flowoa.common.Result;
+import com.flowoa.common.BusinessException;
+import com.flowoa.common.Constants;
 import com.flowoa.dto.ApproveDTO;
 import com.flowoa.entity.ExpenseApply;
 import com.flowoa.service.ExpenseApplyService;
+import com.flowoa.service.FlowService;
+import com.flowoa.vo.FlowProgressVO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 public class ExpenseApplyController {
 
     private final ExpenseApplyService expenseApplyService;
+    private final FlowService flowService;
 
     @GetMapping("/page")
     public Result<PageResult<ExpenseApply>> page(
@@ -28,6 +34,19 @@ public class ExpenseApplyController {
     @GetMapping("/{id}")
     public Result<ExpenseApply> getById(@PathVariable Long id) {
         return Result.ok(expenseApplyService.getById(id));
+    }
+
+    @GetMapping("/progress/{id}")
+    public Result<FlowProgressVO> getProgress(@PathVariable Long id) {
+        ExpenseApply apply = expenseApplyService.getById(id);
+        if (apply == null) {
+            throw new BusinessException("申请记录不存在");
+        }
+        Long currentUserId = StpUtil.getLoginIdAsLong();
+        if (!apply.getUserId().equals(currentUserId) && !StpUtil.hasRole(Constants.ROLE_ADMIN)) {
+            throw new BusinessException(403, "无权查看该申请的流程进度");
+        }
+        return Result.ok(flowService.getProgress(apply.getFlowInstanceId()));
     }
 
     @PostMapping("/submit")
